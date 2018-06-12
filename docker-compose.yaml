@@ -12,21 +12,12 @@ services:
     entrypoint:
       - ./wait-for-postgres.sh
       - db
-  worker:
-    build:
-      dockerfile: docker/Dockerfile.worker
-      context: .
-    hostname: worker
-    volumes:
-      - .:/luigi
-    environment:
-      LUIGI_CORE_DEFAULT-SCHEDULER-URL: http://scheduler:8082
-    depends_on:
-      - scheduler
   db:
     image: postgres:9.5.4
     ports:
       - "5433:5432"
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: luigi
       POSTGRES_DB: dev
